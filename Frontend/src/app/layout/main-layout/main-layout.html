@@ -1,0 +1,155 @@
+
+<div class="sistema">
+
+    @if (menuAbierto()) {
+        <div
+            class="overlay"
+            (click)="cerrarMenu()">
+        </div>
+    }
+
+    <aside
+        class="sidebar"
+        [class.abierto]="menuAbierto()">
+
+        <div class="marca">
+            <div class="logo">
+                <i class="bi bi-wallet2"></i>
+            </div>
+
+            <div>
+                <span class="nombre">
+                    Net<strong>Cash</strong>
+                </span>
+                <small>GESTIÓN EMPRESARIAL</small>
+            </div>
+        </div>
+
+        <nav class="navegacion">
+
+            <div class="titulo-menu">
+                MENÚ PRINCIPAL
+            </div>
+
+            @if (cargandoMenu()) {
+                <div class="text-center p-3">
+                    <span class="spinner-border spinner-border-sm">
+                    </span>
+                </div>
+            }
+
+            @if (errorMenu()) {
+                <div class="p-3 text-warning">
+                    {{ errorMenu() }}
+
+                    <button
+                        class="btn btn-sm btn-outline-light mt-2"
+                        (click)="cargarMenu()">
+                        Reintentar
+                    </button>
+                </div>
+            }
+
+            @for (menu of menus(); track menu.id) {
+
+                <a
+                    [routerLink]="menu.ruta"
+                    routerLinkActive="activo"
+                    (click)="cerrarMenu()">
+
+                    <i [class]="obtenerIcono(menu.icono)"></i>
+
+                    <span>{{ menu.nombre }}</span>
+
+                    <i class="bi bi-chevron-right flecha"></i>
+
+                </a>
+            }
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="perfil">
+
+                <div class="avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div class="datos-perfil">
+                    <strong>
+                        {{ usuario?.nombres }}
+                    </strong>
+
+                    <small>
+                        {{ usuario?.rol }}
+                    </small>
+                </div>
+
+            </div>
+
+            <button
+                class="boton-salir"
+                (click)="cerrarSesion()">
+
+                <i class="bi bi-box-arrow-right"></i>
+                Cerrar sesión
+
+            </button>
+
+        </div>
+
+    </aside>
+
+    <div class="contenido">
+
+        <header class="navbar-superior">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button
+                    class="btn btn-light boton-menu"
+                    (click)="alternarMenu()"
+                    aria-label="Abrir menú">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+                <div>
+                    <strong>NetCash</strong>
+                    <small class="d-block text-secondary">
+                        Sistema de gestión de cajas
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="usuario-superior">
+
+                <div class="text-end">
+                    <strong>
+                        {{ usuario?.nombres }}
+                        {{ usuario?.apellidos }}
+                    </strong>
+
+                    <small class="d-block text-secondary">
+                        {{ usuario?.rol }}
+                    </small>
+                </div>
+
+                <div class="avatar-superior">
+                    <i class="bi bi-person"></i>
+                </div>
+
+            </div>
+
+        </header>
+
+        <main class="pagina">
+            <router-outlet></router-outlet>
+        </main>
+
+    </div>
+
+</div>

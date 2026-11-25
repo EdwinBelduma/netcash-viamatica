@@ -1,0 +1,166 @@
+
+.login-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100dvh;
+}
+
+.panel-informativo {
+    background: linear-gradient(145deg, #0f172a, #172554);
+    color: white;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 30px;
+    font-weight: 600;
+
+    i {
+        background: #2563eb;
+        padding: 10px 15px;
+        border-radius: 12px;
+    }
+
+    strong {
+        color: #60a5fa;
+    }
+}
+
+.etiqueta {
+    color: #93c5fd;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.presentacion h1 {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 750;
+    line-height: 1.2;
+    margin: 20px 0;
+
+    span {
+        color: #60a5fa;
+        display: block;
+    }
+}
+
+.presentacion p {
+    color: #94a3b8;
+    font-size: 17px;
+    max-width: 450px;
+    margin-bottom: 35px;
+}
+
+.beneficio {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+
+    i {
+        color: #60a5fa;
+        font-size: 23px;
+    }
+}
+
+footer {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.panel-acceso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    padding: 30px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 38px;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, .08);
+}
+
+.icono-acceso {
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 25px;
+    margin-bottom: 22px;
+}
+
+h2 {
+    font-weight: 750;
+    color: #0f172a;
+}
+
+.subtitulo {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-control,
+.input-group-text {
+    min-height: 47px;
+    border-color: #cbd5e1;
+}
+
+.input-group-text {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.boton-login {
+    min-height: 48px;
+    border-radius: 9px;
+    font-weight: 600;
+    background: #2563eb;
+}
+
+.seguridad {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 25px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-informativo {
+        display: none;
+    }
+
+    .panel-acceso {
+        min-height: 100dvh;
+        padding: 18px;
+    }
+
+    .login-card {
+        padding: 25px;
+    }
+}

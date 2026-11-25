@@ -1,0 +1,311 @@
+
+<div class="dashboard">
+
+    <div class="encabezado">
+
+        <div>
+            <h1>Dashboard</h1>
+
+            <p>
+                Bienvenido, {{ usuario?.nombres }}.
+                Consulta el estado de tus operaciones.
+            </p>
+        </div>
+
+        <button
+            class="btn btn-outline-primary"
+            (click)="cargarDashboard()"
+            [disabled]="cargando()">
+
+            <i class="bi bi-arrow-clockwise"></i>
+            Actualizar
+
+        </button>
+
+    </div>
+
+    <div class="filtros">
+
+        <div>
+            <label class="form-label">
+                Fecha desde
+            </label>
+
+            <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="desde">
+        </div>
+
+        <div>
+            <label class="form-label">
+                Fecha hasta
+            </label>
+
+            <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="hasta">
+        </div>
+
+        <button
+            class="btn btn-primary"
+            [disabled]="cargando()"
+            (click)="cargarDashboard()">
+
+            <i class="bi bi-funnel"></i>
+            Filtrar
+
+        </button>
+
+    </div>
+
+    @if (error()) {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle"></i>
+            {{ error() }}
+        </div>
+    }
+
+    @if (cargando()) {
+
+        <div class="estado-carga">
+            <div class="spinner-border text-primary"></div>
+            <p>Obteniendo información...</p>
+        </div>
+
+    } @else {
+
+        @if (resumen(); as datos) {
+
+            <div class="indicadores">
+
+                @for (tarjeta of tarjetas(); track tarjeta.titulo) {
+
+                    <div class="tarjeta">
+
+                        <div
+                            class="icono"
+                            [class]="tarjeta.color">
+
+                            <i [class]="'bi ' + tarjeta.icono"></i>
+
+                        </div>
+
+                        <div class="valor">
+                            {{ tarjeta.valor }}
+                        </div>
+
+                        <div class="descripcion">
+                            {{ tarjeta.titulo }}
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="graficos">
+
+                <section class="panel">
+
+                    <h3>
+                        <i class="bi bi-bar-chart"></i>
+                        Atenciones por caja
+                    </h3>
+
+                    @for (item of datos.indicadoresCajas; track item.id) {
+
+                        <div class="indicador-barra">
+
+                            <div class="barra-etiqueta">
+                                <span>{{ item.nombre }}</span>
+                                <strong>{{ item.turnosAtendidos }}</strong>
+                            </div>
+
+                            <div class="barra">
+                                <div
+                                    class="barra-valor"
+                                    [style.width.%]="porcentaje(
+                                        item.turnosAtendidos,
+                                        datos.indicadoresCajas
+                                    )">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    } @empty {
+                        <div class="sin-datos">
+                            No existen atenciones registradas.
+                        </div>
+                    }
+
+                </section>
+
+                <section class="panel">
+
+                    <h3>
+                        <i class="bi bi-people"></i>
+                        Atenciones por cajero
+                    </h3>
+
+                    @for (item of datos.indicadoresCajeros; track item.id) {
+
+                        <div class="indicador-barra">
+
+                            <div class="barra-etiqueta">
+                                <span>{{ item.nombre }}</span>
+                                <strong>{{ item.turnosAtendidos }}</strong>
+                            </div>
+
+                            <div class="barra">
+                                <div
+                                    class="barra-valor verde-barra"
+                                    [style.width.%]="porcentaje(
+                                        item.turnosAtendidos,
+                                        datos.indicadoresCajeros
+                                    )">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    } @empty {
+                        <div class="sin-datos">
+                            No existen atenciones registradas.
+                        </div>
+                    }
+
+                </section>
+
+            </div>
+
+            @if (esAdministrador || esGestor) {
+
+                <section class="panel mb-4">
+
+                    <h3>
+                        <i class="bi bi-person-badge"></i>
+                        Indicadores por gestor
+                    </h3>
+
+                    @for (item of datos.indicadoresGestores; track item.id) {
+
+                        <div class="indicador-barra">
+
+                            <div class="barra-etiqueta">
+                                <span>{{ item.nombre }}</span>
+                                <strong>{{ item.turnosAtendidos }}</strong>
+                            </div>
+
+                            <div class="barra">
+                                <div
+                                    class="barra-valor morado-barra"
+                                    [style.width.%]="porcentaje(
+                                        item.turnosAtendidos,
+                                        datos.indicadoresGestores
+                                    )">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    } @empty {
+                        <div class="sin-datos">
+                            No existen atenciones registradas.
+                        </div>
+                    }
+
+                </section>
+
+            }
+
+            @if (esAdministrador) {
+
+                <section class="panel">
+
+                    <h3>
+                        <i class="bi bi-person-check"></i>
+                        Estado de sesiones de usuarios
+                    </h3>
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Rol</th>
+                                    <th>Último acceso</th>
+                                    <th>Estado registrado</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @for (sesion of datos.sesiones; track sesion.id) {
+
+                                    <tr>
+
+                                        <td>{{ sesion.nombreUsuario }}</td>
+
+                                        <td>{{ sesion.rol }}</td>
+
+                                        <td>
+                                            {{
+                                                sesion.ultimoInicioSesion
+                                                ? (sesion.ultimoInicioSesion |
+                                                    date:'dd/MM/yyyy HH:mm':'-0500')
+                                                : 'Sin acceso'
+                                            }}
+                                        </td>
+
+                                        <td>
+
+                                            <span
+                                                class="estado"
+                                                [class.conectado]="sesion.sesionActiva">
+
+                                                {{
+                                                    sesion.sesionActiva
+                                                    ? 'Activa'
+                                                    : 'Inactiva'
+                                                }}
+
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                } @empty {
+
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            No existen sesiones registradas.
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            }
+
+        }
+
+    }
+
+    <footer class="footer-dashboard">
+        NetCash © 2026 — Sistema de gestión empresarial
+    </footer>
+
+</div>

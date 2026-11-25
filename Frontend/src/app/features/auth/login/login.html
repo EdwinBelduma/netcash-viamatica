@@ -1,0 +1,173 @@
+
+<div class="login-container">
+
+    <section class="panel-informativo">
+
+        <div class="marca">
+            <i class="bi bi-wallet2"></i>
+            <span>Net<strong>Cash</strong></span>
+        </div>
+
+        <div class="presentacion">
+
+            <span class="etiqueta">
+                PLATAFORMA EMPRESARIAL
+            </span>
+
+            <h1>
+                Control financiero.
+                <span>Gestión inteligente.</span>
+            </h1>
+
+            <p>
+                Sistema integral de gestión de cajas,
+                clientes y servicios de telecomunicaciones.
+            </p>
+
+            <div class="beneficio">
+                <i class="bi bi-shield-check"></i>
+                Operaciones seguras
+            </div>
+
+            <div class="beneficio">
+                <i class="bi bi-bar-chart-line"></i>
+                Control de operaciones
+            </div>
+
+            <div class="beneficio">
+                <i class="bi bi-people"></i>
+                Gestión centralizada
+            </div>
+
+        </div>
+
+        <footer>
+            NetCash © 2026
+        </footer>
+
+    </section>
+
+    <section class="panel-acceso">
+
+        <div class="login-card">
+
+            <div class="icono-acceso">
+                <i class="bi bi-shield-lock"></i>
+            </div>
+
+            <h2>Bienvenido</h2>
+
+            <p class="subtitulo">
+                Ingresa tus credenciales para continuar.
+            </p>
+
+            @if (mensajeError()) {
+                <div class="alert alert-danger">
+                    {{ mensajeError() }}
+                </div>
+            }
+
+            <form
+                [formGroup]="formulario"
+                (ngSubmit)="iniciarSesion()">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Nombre de usuario
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-person"></i>
+                        </span>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="nombreUsuario"
+                            autocomplete="username"
+                            placeholder="Ingresa tu usuario">
+                    </div>
+
+                    @if (formulario.controls.nombreUsuario.touched &&
+                         formulario.controls.nombreUsuario.invalid) {
+
+                        <small class="text-danger">
+                            Ingresa un usuario de 8 a 20 caracteres.
+                        </small>
+                    }
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Contraseña
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-lock"></i>
+                        </span>
+
+                        <input
+                            [type]="mostrarContrasena() ? 'text' : 'password'"
+                            class="form-control"
+                            formControlName="contrasena"
+                            autocomplete="current-password"
+                            placeholder="Ingresa tu contraseña">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            aria-label="Mostrar u ocultar contraseña"
+                            (click)="alternarContrasena()">
+
+                            <i [class]="mostrarContrasena()
+                                ? 'bi bi-eye-slash'
+                                : 'bi bi-eye'">
+                            </i>
+
+                        </button>
+
+                    </div>
+
+                    @if (formulario.controls.contrasena.touched &&
+                         formulario.controls.contrasena.invalid) {
+
+                        <small class="text-danger">
+                            Ingresa una contraseña de 8 a 30 caracteres.
+                        </small>
+                    }
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100 boton-login"
+                    [disabled]="cargando()">
+
+                    @if (cargando()) {
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Iniciando sesión...
+                    } @else {
+                        Iniciar sesión
+                        <i class="bi bi-arrow-right"></i>
+                    }
+
+                </button>
+
+            </form>
+
+            <div class="seguridad">
+                <i class="bi bi-shield-check"></i>
+                Autenticación segura
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
