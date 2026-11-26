@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { rolGuard } from './core/guards/rol.guard';
@@ -19,12 +18,40 @@ const operaciones = () =>
 
 export const routes: Routes = [
 
+    // ==========================================
+    // RUTAS PUBLICAS - AUTENTICACION
+    // ==========================================
+
     {
         path: 'login',
         loadComponent: () =>
             import('./features/auth/login/login')
                 .then(m => m.Login)
     },
+
+    // ==========================================
+    // RECUPERACION DE CONTRASENA
+    // ==========================================
+
+    {
+        path: 'recuperar-contrasena',
+        loadComponent: () =>
+            import(
+                './features/auth/recuperar-contrasena/recuperar-contrasena'
+            ).then(m => m.RecuperarContrasena)
+    },
+
+    {
+        path: 'restablecer-contrasena',
+        loadComponent: () =>
+            import(
+                './features/auth/restablecer-contrasena/restablecer-contrasena'
+            ).then(m => m.RestablecerContrasena)
+    },
+
+    // ==========================================
+    // RUTAS PRIVADAS - SISTEMA NETCASH
+    // ==========================================
 
     {
         path: '',
@@ -43,12 +70,20 @@ export const routes: Routes = [
                 pathMatch: 'full'
             },
 
+            // ==================================
+            // DASHBOARD
+            // ==================================
+
             {
                 path: 'dashboard',
                 loadComponent: () =>
                     import('./features/dashboard/dashboard/dashboard')
                         .then(m => m.Dashboard)
             },
+
+            // ==================================
+            // GESTION DE USUARIOS
+            // ==================================
 
             {
                 path: 'usuarios',
@@ -61,6 +96,10 @@ export const routes: Routes = [
                 loadComponent: mantenimiento
             },
 
+            // ==================================
+            // GESTION DE CLIENTES
+            // ==================================
+
             {
                 path: 'clientes',
                 canActivate: [rolGuard],
@@ -71,6 +110,10 @@ export const routes: Routes = [
                 },
                 loadComponent: mantenimiento
             },
+
+            // ==================================
+            // OPERACIONES DE CAJAS
+            // ==================================
 
             {
                 path: 'cajas/operaciones',
@@ -83,6 +126,10 @@ export const routes: Routes = [
                 loadComponent: operaciones
             },
 
+            // ==================================
+            // GESTION DE CAJAS
+            // ==================================
+
             {
                 path: 'cajas',
                 canActivate: [rolGuard],
@@ -93,6 +140,10 @@ export const routes: Routes = [
                 },
                 loadComponent: mantenimiento
             },
+
+            // ==================================
+            // GESTION DE SERVICIOS
+            // ==================================
 
             {
                 path: 'servicios',
@@ -105,6 +156,10 @@ export const routes: Routes = [
                 loadComponent: mantenimiento
             },
 
+            // ==================================
+            // GESTION DE EQUIPOS
+            // ==================================
+
             {
                 path: 'equipos',
                 canActivate: [rolGuard],
@@ -115,6 +170,10 @@ export const routes: Routes = [
                 },
                 loadComponent: mantenimiento
             },
+
+            // ==================================
+            // GESTION DE TURNOS
+            // ==================================
 
             {
                 path: 'turnos',
@@ -127,6 +186,10 @@ export const routes: Routes = [
                 loadComponent: operaciones
             },
 
+            // ==================================
+            // GESTION DE CONTRATOS
+            // ==================================
+
             {
                 path: 'contratos',
                 canActivate: [rolGuard],
@@ -137,6 +200,10 @@ export const routes: Routes = [
                 },
                 loadComponent: operaciones
             },
+
+            // ==================================
+            // GESTION DE PAGOS
+            // ==================================
 
             {
                 path: 'pagos',
@@ -151,6 +218,10 @@ export const routes: Routes = [
 
         ]
     },
+
+    // ==========================================
+    // RUTA NO ENCONTRADA
+    // ==========================================
 
     {
         path: '**',

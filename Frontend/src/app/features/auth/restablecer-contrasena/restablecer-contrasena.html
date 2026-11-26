@@ -1,0 +1,332 @@
+<div class="recuperacion-contenedor">
+
+    <div class="recuperacion-tarjeta">
+
+        <div class="marca">
+
+            <div class="marca-icono">
+
+                <i class="bi bi-wallet2"></i>
+
+            </div>
+
+            <h1>Net<span>Cash</span></h1>
+
+            <small>GESTIÓN EMPRESARIAL</small>
+
+        </div>
+
+        @if (completado()) {
+
+            <div class="recuperacion-icono icono-exito">
+
+                <i class="bi bi-check-circle"></i>
+
+            </div>
+
+            <div class="encabezado">
+
+                <h2>Contraseña actualizada</h2>
+
+                <p>
+                    Tu contraseña ha sido restablecida.
+                    Ya puedes iniciar sesión con tus
+                    nuevas credenciales.
+                </p>
+
+            </div>
+
+            <div class="alert alert-success">
+
+                <i class="bi bi-shield-check"></i>
+
+                {{ mensaje() }}
+
+            </div>
+
+            <a
+                routerLink="/login"
+                class="btn btn-primary boton-enviar">
+
+                <i class="bi bi-box-arrow-in-right"></i>
+
+                Iniciar sesión
+
+            </a>
+
+        } @else {
+
+            <div class="recuperacion-icono">
+
+                <i class="bi bi-lock"></i>
+
+            </div>
+
+            <div class="encabezado">
+
+                <h2>Restablecer contraseña</h2>
+
+                <p>
+                    Ingresa una nueva contraseña segura
+                    para acceder a tu cuenta de NetCash.
+                </p>
+
+            </div>
+
+            @if (!tokenValido) {
+
+                <div class="alert alert-danger">
+
+                    <i class="bi bi-exclamation-circle"></i>
+
+                    El enlace de recuperación no es válido.
+
+                </div>
+
+                <a
+                    routerLink="/recuperar-contrasena"
+                    class="btn btn-primary boton-enviar">
+
+                    Solicitar nuevo enlace
+
+                </a>
+
+            } @else {
+
+                @if (error()) {
+
+                    <div class="alert alert-danger">
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                        {{ error() }}
+
+                    </div>
+
+                }
+
+                <form
+                    [formGroup]="formulario"
+                    (ngSubmit)="restablecer()">
+
+                    <div class="mb-3">
+
+                        <label
+                            for="nuevaContrasena"
+                            class="form-label">
+
+                            Nueva contraseña
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-lock"></i>
+
+                            </span>
+
+                            <input
+                                id="nuevaContrasena"
+                                [type]="mostrarContrasena()
+                                    ? 'text'
+                                    : 'password'"
+                                class="form-control"
+                                formControlName="nuevaContrasena"
+                                autocomplete="new-password"
+                                placeholder="Nueva contraseña">
+
+                            <button
+                                type="button"
+                                class="btn boton-visibilidad"
+                                aria-label="Mostrar u ocultar contraseña"
+                                (click)="alternarContrasena()">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-eye]="!mostrarContrasena()"
+                                    [class.bi-eye-slash]="mostrarContrasena()">
+
+                                </i>
+
+                            </button>
+
+                        </div>
+
+                        @if (
+                            formulario.controls.nuevaContrasena.invalid &&
+                            formulario.controls.nuevaContrasena.touched
+                        ) {
+
+                            <small class="text-danger">
+
+                                La contraseña no cumple
+                                los requisitos de seguridad.
+
+                            </small>
+
+                        }
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label
+                            for="confirmarContrasena"
+                            class="form-label">
+
+                            Confirmar contraseña
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-shield-lock"></i>
+
+                            </span>
+
+                            <input
+                                id="confirmarContrasena"
+                                [type]="mostrarConfirmacion()
+                                    ? 'text'
+                                    : 'password'"
+                                class="form-control"
+                                formControlName="confirmarContrasena"
+                                autocomplete="new-password"
+                                placeholder="Repite la contraseña">
+
+                            <button
+                                type="button"
+                                class="btn boton-visibilidad"
+                                aria-label="Mostrar u ocultar confirmación"
+                                (click)="alternarConfirmacion()">
+
+                                <i
+                                    class="bi"
+                                    [class.bi-eye]="!mostrarConfirmacion()"
+                                    [class.bi-eye-slash]="mostrarConfirmacion()">
+
+                                </i>
+
+                            </button>
+
+                        </div>
+
+                        @if (
+                            formulario.hasError('contrasenasNoCoinciden') &&
+                            formulario.controls.confirmarContrasena.touched
+                        ) {
+
+                            <small class="text-danger">
+
+                                Las contraseñas no coinciden.
+
+                            </small>
+
+                        }
+
+                    </div>
+
+                    <div class="requisitos">
+
+                        <strong>
+
+                            <i class="bi bi-shield-check"></i>
+
+                            Requisitos de seguridad
+
+                        </strong>
+
+                        <ul>
+
+                            <li>
+                                Entre 8 y 30 caracteres.
+                            </li>
+
+                            <li>
+                                Al menos una letra mayúscula.
+                            </li>
+
+                            <li>
+                                Al menos un número.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary boton-enviar"
+                        [disabled]="formulario.invalid || cargando()">
+
+                        @if (cargando()) {
+
+                            <span
+                                class="spinner-border spinner-border-sm">
+                            </span>
+
+                            Actualizando contraseña...
+
+                        } @else {
+
+                            <i class="bi bi-key"></i>
+
+                            Cambiar contraseña
+
+                        }
+
+                    </button>
+
+                </form>
+
+                @if (error()) {
+
+                    <div class="volver">
+
+                        <a routerLink="/recuperar-contrasena">
+
+                            Solicitar un nuevo enlace
+
+                        </a>
+
+                    </div>
+
+                }
+
+            }
+
+            <div class="volver">
+
+                <a routerLink="/login">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Volver al inicio de sesión
+
+                </a>
+
+            </div>
+
+        }
+
+        <div class="seguridad">
+
+            <i class="bi bi-shield-check"></i>
+
+            Protección segura de credenciales
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        NetCash © 2026 — Sistema de gestión empresarial
+
+    </footer>
+
+</div>

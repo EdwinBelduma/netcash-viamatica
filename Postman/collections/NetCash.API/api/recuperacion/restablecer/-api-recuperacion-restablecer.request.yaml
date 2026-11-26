@@ -1,0 +1,17 @@
+$kind: http-request
+name: /api/recuperacion/restablecer
+url: "{{baseUrl}}/api/recuperacion/restablecer"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "confirmarContrasena": "string",
+      "nuevaContrasena": "S1lnONEW%A",
+      "token": "string"
+    }
+settings: {}
+examples: ./.resources/-api-recuperacion-restablecer.resources/examples
+order: 1000

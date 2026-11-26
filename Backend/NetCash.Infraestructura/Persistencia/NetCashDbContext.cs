@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using NetCash.Dominio.Entidades;
 using NetCash.Dominio.Enumeraciones;
@@ -13,7 +12,10 @@ public class NetCashDbContext : DbContext
     {
     }
 
-    // Entidades del sistema
+    // ==========================================
+    // ENTIDADES DEL SISTEMA
+    // ==========================================
+
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<Rol> Roles => Set<Rol>();
     public DbSet<Cliente> Clientes => Set<Cliente>();
@@ -29,6 +31,14 @@ public class NetCashDbContext : DbContext
     public DbSet<Menu> Menus => Set<Menu>();
     public DbSet<RolMenu> RolesMenus => Set<RolMenu>();
 
+    // Nueva entidad de recuperacion de contrasena
+    public DbSet<TokenRecuperacion> TokensRecuperacion
+        => Set<TokenRecuperacion>();
+
+    // ==========================================
+    // CONFIGURACION DEL MODELO
+    // ==========================================
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -41,9 +51,17 @@ public class NetCashDbContext : DbContext
         ConfigurarContratos(modelBuilder);
         ConfigurarPagos(modelBuilder);
         ConfigurarMenus(modelBuilder);
+
+        // Nueva configuracion
+        ConfigurarTokensRecuperacion(modelBuilder);
+
         ConfigurarEliminacionLogica(modelBuilder);
         ConfigurarDatosIniciales(modelBuilder);
     }
+
+    // ==========================================
+    // CONFIGURACION DE USUARIOS
+    // ==========================================
 
     private static void ConfigurarUsuarios(ModelBuilder builder)
     {
@@ -82,6 +100,10 @@ public class NetCashDbContext : DbContext
             .IsUnique();
     }
 
+    // ==========================================
+    // CONFIGURACION DE CLIENTES
+    // ==========================================
+
     private static void ConfigurarClientes(ModelBuilder builder)
     {
         builder.Entity<Cliente>(entity =>
@@ -117,6 +139,10 @@ public class NetCashDbContext : DbContext
         });
     }
 
+    // ==========================================
+    // CONFIGURACION DE CAJAS
+    // ==========================================
+
     private static void ConfigurarCajas(ModelBuilder builder)
     {
         builder.Entity<Caja>()
@@ -151,6 +177,10 @@ public class NetCashDbContext : DbContext
         });
     }
 
+    // ==========================================
+    // CONFIGURACION DE TURNOS
+    // ==========================================
+
     private static void ConfigurarTurnos(ModelBuilder builder)
     {
         builder.Entity<Turno>(entity =>
@@ -179,6 +209,10 @@ public class NetCashDbContext : DbContext
         });
     }
 
+    // ==========================================
+    // CONFIGURACION DE SERVICIOS Y EQUIPOS
+    // ==========================================
+
     private static void ConfigurarServicios(ModelBuilder builder)
     {
         builder.Entity<Servicio>(entity =>
@@ -201,6 +235,10 @@ public class NetCashDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 
+    // ==========================================
+    // CONFIGURACION DE CONTRATOS
+    // ==========================================
+
     private static void ConfigurarContratos(ModelBuilder builder)
     {
         builder.Entity<Contrato>(entity =>
@@ -215,12 +253,20 @@ public class NetCashDbContext : DbContext
         });
     }
 
+    // ==========================================
+    // CONFIGURACION DE PAGOS
+    // ==========================================
+
     private static void ConfigurarPagos(ModelBuilder builder)
     {
         builder.Entity<Pago>()
             .Property(x => x.Monto)
             .HasPrecision(12, 2);
     }
+
+    // ==========================================
+    // CONFIGURACION DE MENUS DINAMICOS
+    // ==========================================
 
     private static void ConfigurarMenus(ModelBuilder builder)
     {
@@ -238,6 +284,45 @@ public class NetCashDbContext : DbContext
             .HasForeignKey(x => x.MenuPadreId)
             .OnDelete(DeleteBehavior.Restrict);
     }
+
+    // ==========================================
+    // CONFIGURACION DE TOKENS DE RECUPERACION
+    // ==========================================
+
+    private static void ConfigurarTokensRecuperacion(
+        ModelBuilder builder)
+    {
+        builder.Entity<TokenRecuperacion>(entity =>
+        {
+            entity.ToTable("TokensRecuperacion");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.TokenHash)
+                .HasMaxLength(64)
+                .IsRequired();
+
+            entity.HasIndex(x => x.TokenHash)
+                .IsUnique();
+
+            entity.HasIndex(x => x.UsuarioId);
+
+            entity.Property(x => x.FechaExpiracion)
+                .IsRequired();
+
+            entity.Property(x => x.Utilizado)
+                .HasDefaultValue(false);
+
+            entity.HasOne(x => x.Usuario)
+                .WithMany()
+                .HasForeignKey(x => x.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
+
+    // ==========================================
+    // CONFIGURACION DE ELIMINACION LOGICA
+    // ==========================================
 
     private static void ConfigurarEliminacionLogica(
         ModelBuilder builder)
@@ -283,7 +368,17 @@ public class NetCashDbContext : DbContext
 
         builder.Entity<RolMenu>()
             .HasQueryFilter(x => x.FechaEliminacion == null);
+
+        // Eliminacion logica de tokens de recuperacion
+        builder.Entity<TokenRecuperacion>()
+            .HasQueryFilter(x =>
+                x.FechaEliminacion == null &&
+                x.Usuario.FechaEliminacion == null);
     }
+
+    // ==========================================
+    // CONFIGURACION DE DATOS INICIALES
+    // ==========================================
 
     private static void ConfigurarDatosIniciales(
         ModelBuilder builder)

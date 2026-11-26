@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/turnos/:id/finalizar
+url: "{{baseUrl}}/api/turnos/:id/finalizar"
+method: PATCH
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-turnos-id-finalizar.resources/examples
+order: 1000

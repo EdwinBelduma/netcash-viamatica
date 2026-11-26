@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/cajas/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+  pathVariables:
+    id: "1833"
+  body:
+    type: json
+    content: |-
+      {
+        "descripcion": "string"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

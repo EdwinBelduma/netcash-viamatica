@@ -1,0 +1,7 @@
+$kind: http-request
+name: /api/cajas
+url: "{{baseUrl}}/api/cajas"
+method: GET
+settings: {}
+examples: ./.resources/-api-cajas.resources/examples
+order: 2000

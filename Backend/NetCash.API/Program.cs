@@ -1,5 +1,5 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetCash.Aplicacion.Interfaces;
@@ -10,6 +10,7 @@ using NetCash.Infraestructura.Seguridad;
 using NetCash.Infraestructura.Servicios;
 using Serilog;
 using System.Security.Claims;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -155,6 +156,76 @@ try
     builder.Services.AddScoped<InicializadorMenus>();
 
     // ==========================================
+    // INYECCION DE DEPENDENCIAS - IMPORTACIONES
+    // ==========================================
+
+    builder.Services.AddScoped<
+        IImportacionServicio,
+        ImportacionServicio>();
+
+    // ==========================================
+    // INYECCION DE DEPENDENCIAS - RECUPERACION
+    // ==========================================
+
+    builder.Services.AddScoped<
+        IRecuperacionServicio,
+        RecuperacionServicio>();
+
+    builder.Services.AddScoped<
+        ICorreoServicio,
+        CorreoServicio>();
+
+    // ==========================================
+    // LIMITACION DE SOLICITUDES - RATE LIMITING
+    // ==========================================
+
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.RejectionStatusCode =
+            StatusCodes.Status429TooManyRequests;
+
+        options.AddPolicy("Recuperacion", contexto =>
+        {
+            var ip = contexto.Connection
+                .RemoteIpAddress?.ToString()
+                ?? "desconocida";
+
+            return RateLimitPartition
+                .GetFixedWindowLimiter(
+                    partitionKey: ip,
+                    factory: _ =>
+                        new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 5,
+
+                            Window = TimeSpan.FromMinutes(1),
+
+                            QueueLimit = 0,
+
+                            AutoReplenishment = true
+                        });
+        });
+
+        options.OnRejected = async (
+            contexto,
+            cancellationToken) =>
+        {
+            contexto.HttpContext.Response.StatusCode =
+                StatusCodes.Status429TooManyRequests;
+
+            await contexto.HttpContext.Response
+                .WriteAsJsonAsync(
+                    new
+                    {
+                        mensaje =
+                            "Demasiadas solicitudes. " +
+                            "Intenta nuevamente en un minuto."
+                    },
+                    cancellationToken: cancellationToken);
+        };
+    });
+
+    // ==========================================
     // AUTENTICACION JWT Y JWE
     // ==========================================
 
@@ -223,18 +294,42 @@ try
     app.UseSerilogRequestLogging();
 
     // ==========================================
-    // INICIALIZACION DE MENUS Y ADMINISTRADOR
+    // MIGRACIONES E INICIALIZACION DEL SISTEMA
     // ==========================================
 
     using (var scope = app.Services.CreateScope())
     {
-        // Inicializar menus dinamicos
+        // ======================================
+        // MIGRACIONES AUTOMATICAS DE POSTGRESQL
+        // ======================================
+
+        var dbContext = scope.ServiceProvider
+            .GetRequiredService<NetCashDbContext>();
+
+        Log.Information(
+            "Verificando migraciones de PostgreSQL.");
+
+        await dbContext.Database.MigrateAsync();
+
+        Log.Information(
+            "Migraciones de PostgreSQL verificadas correctamente.");
+
+        // ======================================
+        // INICIALIZACION DE MENUS DINAMICOS
+        // ======================================
+
         var inicializadorMenus = scope.ServiceProvider
             .GetRequiredService<InicializadorMenus>();
 
         await inicializadorMenus.InicializarAsync();
 
-        // Crear administrador inicial
+        Log.Information(
+            "Menus y permisos inicializados correctamente.");
+
+        // ======================================
+        // CREACION DEL ADMINISTRADOR INICIAL
+        // ======================================
+
         var contrasena = builder.Configuration[
             "Administrador:Contrasena"];
 
@@ -252,6 +347,9 @@ try
                     "Usuario administrador inicial creado.");
             }
         }
+
+        Log.Information(
+            "Inicializacion de NetCash completada.");
     }
 
     // ==========================================
@@ -274,9 +372,13 @@ try
     // CONFIGURACION DEL MIDDLEWARE
     // ==========================================
 
+    app.UseRouting();
+
     app.UseCors("Angular");
 
     app.UseAuthentication();
+
+    app.UseRateLimiter();
 
     app.UseAuthorization();
 
@@ -292,6 +394,13 @@ try
         estado = "Operativo",
         fecha = DateTime.UtcNow
     }));
+
+    // ==========================================
+    // INICIO DE LA APLICACION
+    // ==========================================
+
+    Log.Information(
+        "NetCash API configurada correctamente.");
 
     app.Run();
 }

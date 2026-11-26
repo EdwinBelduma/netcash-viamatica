@@ -1,0 +1,7 @@
+$kind: http-request
+name: /api/estado
+url: "{{baseUrl}}/api/estado"
+method: GET
+settings: {}
+examples: ./.resources/-api-estado.resources/examples
+order: 1000

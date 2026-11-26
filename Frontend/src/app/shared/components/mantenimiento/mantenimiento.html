@@ -1,4 +1,3 @@
-
 <div class="encabezado">
 
     <div>
@@ -42,6 +41,31 @@
 
 </div>
 
+<!-- ====================================== -->
+<!-- IMPORTACION MASIVA DE REGISTROS CSV    -->
+<!-- ====================================== -->
+
+@if (
+    (modulo === 'usuarios' || modulo === 'clientes')
+    && puedeModificar()
+) {
+
+    <div class="mb-3">
+
+        <app-importacion-csv
+            [tipo]="modulo === 'usuarios' ? 'usuarios' : 'clientes'"
+            (importacionCompletada)="cargar()">
+
+        </app-importacion-csv>
+
+    </div>
+
+}
+
+<!-- ====================================== -->
+<!-- MENSAJES DE CONFIRMACION Y ERROR       -->
+<!-- ====================================== -->
+
 @if (mensaje()) {
 
     <div class="alert alert-success">
@@ -63,6 +87,10 @@
     </div>
 
 }
+
+<!-- ====================================== -->
+<!-- FORMULARIO DE REGISTROS                -->
+<!-- ====================================== -->
 
 @if (formularioVisible()) {
 
@@ -278,6 +306,10 @@
     </section>
 
 }
+
+<!-- ====================================== -->
+<!-- LISTADO Y BUSQUEDA DE REGISTROS        -->
+<!-- ====================================== -->
 
 <section class="panel">
 
@@ -508,6 +540,10 @@
     </div>
 
 </section>
+
+<!-- ====================================== -->
+<!-- PIE DE PAGINA                          -->
+<!-- ====================================== -->
 
 <footer class="footer-modulo">
     NetCash © 2026 — Sistema de gestión empresarial

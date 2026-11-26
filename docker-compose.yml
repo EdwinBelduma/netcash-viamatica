@@ -1,4 +1,5 @@
 services:
+
   postgres:
     image: postgres:17
     container_name: netcash-postgres
@@ -16,10 +17,81 @@ services:
       - netcash_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: [CMD-SHELL, 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+
+    container_name: netcash-backend
+    restart: unless-stopped
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+
+      Jwt__ClaveFirma: ${JWT_CLAVE_FIRMA}
+      Jwt__ClaveCifrado: ${JWT_CLAVE_CIFRADO}
+      Jwt__Emisor: NetCash.API
+      Jwt__Audiencia: NetCash.Frontend
+
+      Seguridad__ClaveCifrado: ${SEGURIDAD_CLAVE_CIFRADO}
+
+      Administrador__Contrasena: ${ADMIN_CONTRASENA}
+
+      # Recuperacion de contrasena
+      Recuperacion__UrlFrontend: "http://localhost:4200"
+
+      # Configuracion SMTP de Mailpit
+      Correo__SmtpHost: mailpit
+      Correo__SmtpPort: "1025"
+      Correo__Remitente: "seguridad@netcash.local"
+      Correo__HabilitarSsl: "false"
+
+    ports:
+      - "127.0.0.1:5000:8080"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+    volumes:
+      - netcash_logs:/app/logs
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+
+    container_name: netcash-frontend
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:4200:80"
+
+    depends_on:
+      - backend
+
+  # ==========================================
+  # SERVIDOR DE CORREO PARA PRUEBAS
+  # ==========================================
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: netcash-mailpit
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:8025:8025"
 
 volumes:
   netcash_data:
+  netcash_logs:

@@ -1,0 +1,15 @@
+$kind: http-request
+name: /api/importaciones/clientes
+url: "{{baseUrl}}/api/importaciones/clientes"
+method: POST
+headers:
+  Content-Type: multipart/form-data
+body:
+  type: formdata
+  content:
+    - type: file
+      key: archivo
+      src: []
+settings: {}
+examples: ./.resources/-api-importaciones-clientes.resources/examples
+order: 1000

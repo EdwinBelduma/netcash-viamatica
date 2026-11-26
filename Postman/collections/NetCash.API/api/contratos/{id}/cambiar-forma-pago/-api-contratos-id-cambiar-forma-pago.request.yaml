@@ -1,0 +1,18 @@
+$kind: http-request
+name: /api/contratos/:id/cambiar-forma-pago
+url: "{{baseUrl}}/api/contratos/:id/cambiar-forma-pago"
+method: PATCH
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "formaPagoId": 285545546,
+      "turnoId": 2105828290
+    }
+settings: {}
+examples: ./.resources/-api-contratos-id-cambiar-forma-pago.resources/examples
+order: 1000

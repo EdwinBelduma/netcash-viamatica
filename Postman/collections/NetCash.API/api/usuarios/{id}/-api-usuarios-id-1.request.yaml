@@ -1,0 +1,21 @@
+$kind: http-request
+name: /api/usuarios/:id
+url: "{{baseUrl}}/api/usuarios/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "apellidos": "string",
+      "correo": "FS-GkqSn9D-R-iD@oqijroscvHjIVhJDQuEXPXXYMmosAyFdN.ci",
+      "identificacion": "8950822029",
+      "nombres": "string",
+      "rolId": 1729825404
+    }
+settings: {}
+examples: ./.resources/-api-usuarios-id-1.resources/examples
+order: 3000

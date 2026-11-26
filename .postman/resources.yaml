@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: dd987577-2326-4368-8020-8066a4cce97a
+
+cloudResources:
+  collections:
+    ../postman/collections/NetCash.API: 083e82c7-8eef-41e2-8fed-303b2da9ff86
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

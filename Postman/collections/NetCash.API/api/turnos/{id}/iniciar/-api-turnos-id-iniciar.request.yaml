@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/turnos/:id/iniciar
+url: "{{baseUrl}}/api/turnos/:id/iniciar"
+method: PATCH
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-turnos-id-iniciar.resources/examples
+order: 1000

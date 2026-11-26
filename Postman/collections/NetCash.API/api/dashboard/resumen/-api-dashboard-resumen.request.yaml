@@ -1,0 +1,10 @@
+$kind: http-request
+name: /api/dashboard/resumen
+url: "{{baseUrl}}/api/dashboard/resumen?desde=1998-11-09&hasta=1998-11-09"
+method: GET
+queryParams:
+  desde: 1998-11-09
+  hasta: 1998-11-09
+settings: {}
+examples: ./.resources/-api-dashboard-resumen.resources/examples
+order: 1000

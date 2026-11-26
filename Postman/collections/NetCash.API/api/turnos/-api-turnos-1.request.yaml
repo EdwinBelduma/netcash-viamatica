@@ -1,0 +1,18 @@
+$kind: http-request
+name: /api/turnos
+url: "{{baseUrl}}/api/turnos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "cajaId": 933284709,
+      "cajeroId": 410792784,
+      "clienteId": 1360114300,
+      "tipoAtencion": 1
+    }
+settings: {}
+examples: ./.resources/-api-turnos-1.resources/examples
+order: 3000

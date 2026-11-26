@@ -1,4 +1,3 @@
-
 import {
     Component,
     OnInit,
@@ -14,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { MantenimientoService } from '../../../core/services/mantenimiento.service';
 import { AuthService } from '../../../core/services/auth.service';
+
+import { ImportacionCsv } from '../importacion-csv/importacion-csv';
 
 interface Campo {
     nombre: string;
@@ -42,7 +43,8 @@ interface Columna {
     standalone: true,
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        ImportacionCsv
     ],
     templateUrl: './mantenimiento.html',
     styleUrl: './mantenimiento.scss'

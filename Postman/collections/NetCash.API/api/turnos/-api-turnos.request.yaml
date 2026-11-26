@@ -1,0 +1,7 @@
+$kind: http-request
+name: /api/turnos
+url: "{{baseUrl}}/api/turnos"
+method: GET
+settings: {}
+examples: ./.resources/-api-turnos.resources/examples
+order: 2000

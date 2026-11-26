@@ -1,0 +1,20 @@
+$kind: http-request
+name: /api/pagos
+url: "{{baseUrl}}/api/pagos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "contratoId": 463933910,
+      "turnoId": 996584918,
+      "formaPagoId": 170547785,
+      "monto": 6181771702.2678175,
+      "referencia": "string",
+      "observacion": "string"
+    }
+settings: {}
+examples: ./.resources/-api-pagos-1.resources/examples
+order: 2000

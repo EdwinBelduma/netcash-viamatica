@@ -1,0 +1,7 @@
+$kind: http-request
+name: /api/clientes
+url: "{{baseUrl}}/api/clientes"
+method: GET
+settings: {}
+examples: ./.resources/-api-clientes.resources/examples
+order: 2000

@@ -1,0 +1,18 @@
+$kind: http-request
+name: /api/contratos/:id/cambiar-servicio
+url: "{{baseUrl}}/api/contratos/:id/cambiar-servicio"
+method: PATCH
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "servicioId": 1301770965,
+      "turnoId": 690634270
+    }
+settings: {}
+examples: ./.resources/-api-contratos-id-cambiar-servicio.resources/examples
+order: 1000

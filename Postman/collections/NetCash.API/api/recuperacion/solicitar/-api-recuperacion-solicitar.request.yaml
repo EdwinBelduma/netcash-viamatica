@@ -1,0 +1,15 @@
+$kind: http-request
+name: /api/recuperacion/solicitar
+url: "{{baseUrl}}/api/recuperacion/solicitar"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "correo": "lm-2e@HVYRJr.eon"
+    }
+settings: {}
+examples: ./.resources/-api-recuperacion-solicitar.resources/examples
+order: 1000

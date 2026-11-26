@@ -599,6 +599,55 @@ namespace NetCash.Infraestructura.Persistencia.Migraciones
                     b.ToTable("Servicios");
                 });
 
+            modelBuilder.Entity("NetCash.Dominio.Entidades.TokenRecuperacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("FechaUtilizacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Utilizado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("TokensRecuperacion", (string)null);
+                });
+
             modelBuilder.Entity("NetCash.Dominio.Entidades.Turno", b =>
                 {
                     b.Property<int>("Id")
@@ -940,6 +989,17 @@ namespace NetCash.Infraestructura.Persistencia.Migraciones
                     b.Navigation("Menu");
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("NetCash.Dominio.Entidades.TokenRecuperacion", b =>
+                {
+                    b.HasOne("NetCash.Dominio.Entidades.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("NetCash.Dominio.Entidades.Turno", b =>

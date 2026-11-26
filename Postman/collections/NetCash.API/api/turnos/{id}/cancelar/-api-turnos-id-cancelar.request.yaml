@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/turnos/:id/cancelar
+url: "{{baseUrl}}/api/turnos/:id/cancelar"
+method: PATCH
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-turnos-id-cancelar.resources/examples
+order: 1000

@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/cajas/:id
+url: "{{baseUrl}}/api/cajas/:id"
+method: DELETE
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-cajas-id-2.resources/examples
+order: 6000

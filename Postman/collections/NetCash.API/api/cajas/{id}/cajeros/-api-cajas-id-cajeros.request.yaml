@@ -1,0 +1,17 @@
+$kind: http-request
+name: /api/cajas/:id/cajeros
+url: "{{baseUrl}}/api/cajas/:id/cajeros"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "usuarioId": 161122218
+    }
+settings: {}
+examples: ./.resources/-api-cajas-id-cajeros.resources/examples
+order: 2000

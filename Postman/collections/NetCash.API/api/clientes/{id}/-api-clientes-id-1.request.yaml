@@ -1,0 +1,23 @@
+$kind: http-request
+name: /api/clientes/:id
+url: "{{baseUrl}}/api/clientes/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "apellidos": "string",
+      "correo": "3wKC51UeV6@MpIAkAOOVmbVKEUcoEjPKOpC.xowv",
+      "direccion": "string",
+      "identificacion": "2314048879",
+      "nombres": "string",
+      "referenciaDireccion": "string",
+      "telefono": "3193668293"
+    }
+settings: {}
+examples: ./.resources/-api-clientes-id-1.resources/examples
+order: 2000

@@ -1,0 +1,18 @@
+$kind: http-request
+name: /api/contratos/:id/cancelar
+url: "{{baseUrl}}/api/contratos/:id/cancelar"
+method: PATCH
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "motivo": "string",
+      "turnoId": 62076376
+    }
+settings: {}
+examples: ./.resources/-api-contratos-id-cancelar.resources/examples
+order: 1000

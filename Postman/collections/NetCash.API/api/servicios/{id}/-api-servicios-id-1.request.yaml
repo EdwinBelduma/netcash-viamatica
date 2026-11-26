@@ -1,0 +1,20 @@
+$kind: http-request
+name: /api/servicios/:id
+url: "{{baseUrl}}/api/servicios/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "descripcion": "string",
+      "nombre": "string",
+      "velocidadMbps": 1677731436,
+      "precio": 1831753252.8668227
+    }
+settings: {}
+examples: ./.resources/-api-servicios-id-1.resources/examples
+order: 2000

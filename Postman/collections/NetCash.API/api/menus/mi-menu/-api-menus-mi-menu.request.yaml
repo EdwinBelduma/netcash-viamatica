@@ -1,0 +1,7 @@
+$kind: http-request
+name: /api/menus/mi-menu
+url: "{{baseUrl}}/api/menus/mi-menu"
+method: GET
+settings: {}
+examples: ./.resources/-api-menus-mi-menu.resources/examples
+order: 1000

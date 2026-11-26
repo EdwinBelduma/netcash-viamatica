@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/usuarios/:id/aprobar
+url: "{{baseUrl}}/api/usuarios/:id/aprobar"
+method: PATCH
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-usuarios-id-aprobar.resources/examples
+order: 1000

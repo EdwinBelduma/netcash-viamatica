@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/equipos
+url: "{{baseUrl}}/api/equipos?servicioId=1833"
+method: GET
+queryParams:
+  servicioId: "1833"
+settings: {}
+examples: ./.resources/-api-equipos.resources/examples
+order: 2000

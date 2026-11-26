@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/contratos
+url: "{{baseUrl}}/api/contratos?clienteId=1833"
+method: GET
+queryParams:
+  clienteId: "1833"
+settings: {}
+examples: ./.resources/-api-contratos.resources/examples
+order: 2000

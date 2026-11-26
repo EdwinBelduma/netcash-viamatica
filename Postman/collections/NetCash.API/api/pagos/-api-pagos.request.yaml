@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/pagos
+url: "{{baseUrl}}/api/pagos?contratoId=1833"
+method: GET
+queryParams:
+  contratoId: "1833"
+settings: {}
+examples: ./.resources/-api-pagos.resources/examples
+order: 1000

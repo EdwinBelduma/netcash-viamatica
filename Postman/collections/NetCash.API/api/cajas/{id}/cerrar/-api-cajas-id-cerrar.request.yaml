@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/cajas/:id/cerrar
+url: "{{baseUrl}}/api/cajas/:id/cerrar"
+method: POST
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-cajas-id-cerrar.resources/examples
+order: 1000

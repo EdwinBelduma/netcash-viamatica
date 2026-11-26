@@ -1,0 +1,18 @@
+$kind: http-request
+name: /api/servicios
+url: "{{baseUrl}}/api/servicios"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "descripcion": "string",
+      "nombre": "string",
+      "velocidadMbps": 1677731436,
+      "precio": 1831753252.8668227
+    }
+settings: {}
+examples: ./.resources/-api-servicios-1.resources/examples
+order: 3000

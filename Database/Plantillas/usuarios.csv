@@ -1,0 +1,6 @@
+NombreUsuario;Nombres;Apellidos;Identificacion;Correo;Contrasena;RolId
+gestor005;Andres;Mendoza;0700000101;andres@example.com;Andres2026@;2
+gestor006;Daniela;Torres;0700000102;daniela@example.com;Daniela2026@;2
+cajero007;Miguel;Vargas;0700000103;miguel@example.com;Miguel2026@;3
+cajero008;Valeria;Castro;0700000104;valeria@example.com;Valeria2026@;3
+cajero009;David;Romero;0700000105;david@example.com;David2026@;3

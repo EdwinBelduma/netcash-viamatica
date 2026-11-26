@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/contratos/:id
+url: "{{baseUrl}}/api/contratos/:id"
+method: GET
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-contratos-id.resources/examples
+order: 4000

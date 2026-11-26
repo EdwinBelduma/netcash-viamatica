@@ -1,0 +1,9 @@
+$kind: http-request
+name: /api/turnos/:id
+url: "{{baseUrl}}/api/turnos/:id"
+method: DELETE
+pathVariables:
+  id: "1833"
+settings: {}
+examples: ./.resources/-api-turnos-id-1.resources/examples
+order: 5000

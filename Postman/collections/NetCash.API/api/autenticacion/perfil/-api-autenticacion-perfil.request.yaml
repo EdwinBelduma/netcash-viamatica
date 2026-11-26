@@ -1,0 +1,7 @@
+$kind: http-request
+name: /api/autenticacion/perfil
+url: "{{baseUrl}}/api/autenticacion/perfil"
+method: GET
+settings: {}
+examples: ./.resources/-api-autenticacion-perfil.resources/examples
+order: 1000

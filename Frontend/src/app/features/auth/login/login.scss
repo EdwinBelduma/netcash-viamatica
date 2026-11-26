@@ -1,9 +1,12 @@
-
 .login-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 100dvh;
 }
+
+// ==========================================
+// PANEL INFORMATIVO
+// ==========================================
 
 .panel-informativo {
     background: linear-gradient(145deg, #0f172a, #172554);
@@ -75,6 +78,10 @@ footer {
     font-size: 13px;
 }
 
+// ==========================================
+// PANEL DE ACCESO
+// ==========================================
+
 .panel-acceso {
     display: flex;
     align-items: center;
@@ -116,6 +123,10 @@ h2 {
     margin-bottom: 30px;
 }
 
+// ==========================================
+// CAMPOS DEL FORMULARIO
+// ==========================================
+
 .form-label {
     font-weight: 600;
     font-size: 14px;
@@ -132,12 +143,61 @@ h2 {
     color: #64748b;
 }
 
+// ==========================================
+// RECUPERACION DE CONTRASENA
+// ==========================================
+
+.recuperar-contrasena {
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .enlace-recuperacion {
+
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        font-size: 13px;
+        font-weight: 500;
+        color: #2563eb;
+
+        text-decoration: none;
+
+        transition: color 0.2s ease;
+
+        i {
+            font-size: 14px;
+        }
+
+        &:hover {
+            color: #1d4ed8 !important;
+            text-decoration: underline !important;
+        }
+
+        &:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 4px;
+            border-radius: 3px;
+        }
+    }
+}
+
+// ==========================================
+// BOTON DE INICIO DE SESION
+// ==========================================
+
 .boton-login {
     min-height: 48px;
     border-radius: 9px;
     font-weight: 600;
     background: #2563eb;
 }
+
+// ==========================================
+// INFORMACION DE SEGURIDAD
+// ==========================================
 
 .seguridad {
     text-align: center;
@@ -146,7 +206,12 @@ h2 {
     margin-top: 25px;
 }
 
+// ==========================================
+// DISENO RESPONSIVE
+// ==========================================
+
 @media (max-width: 768px) {
+
     .login-container {
         grid-template-columns: 1fr;
     }
@@ -162,5 +227,12 @@ h2 {
 
     .login-card {
         padding: 25px;
+    }
+
+    .recuperar-contrasena {
+
+        .enlace-recuperacion {
+            font-size: 12px;
+        }
     }
 }

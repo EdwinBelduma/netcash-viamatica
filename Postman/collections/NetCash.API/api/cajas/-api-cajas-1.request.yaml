@@ -1,0 +1,15 @@
+$kind: http-request
+name: /api/cajas
+url: "{{baseUrl}}/api/cajas"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "descripcion": "string"
+    }
+settings: {}
+examples: ./.resources/-api-cajas-1.resources/examples
+order: 3000

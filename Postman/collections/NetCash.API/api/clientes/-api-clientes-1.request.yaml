@@ -1,0 +1,21 @@
+$kind: http-request
+name: /api/clientes
+url: "{{baseUrl}}/api/clientes"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "apellidos": "string",
+      "correo": "3wKC51UeV6@MpIAkAOOVmbVKEUcoEjPKOpC.xowv",
+      "direccion": "string",
+      "identificacion": "2314048879",
+      "nombres": "string",
+      "referenciaDireccion": "string",
+      "telefono": "3193668293"
+    }
+settings: {}
+examples: ./.resources/-api-clientes-1.resources/examples
+order: 3000

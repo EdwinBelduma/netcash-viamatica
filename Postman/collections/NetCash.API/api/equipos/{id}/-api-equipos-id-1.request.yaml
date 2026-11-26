@@ -1,0 +1,19 @@
+$kind: http-request
+name: /api/equipos/:id
+url: "{{baseUrl}}/api/equipos/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "descripcion": "string",
+      "nombre": "string",
+      "servicioId": 1709608968
+    }
+settings: {}
+examples: ./.resources/-api-equipos-id-1.resources/examples
+order: 2000

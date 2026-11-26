@@ -1,0 +1,17 @@
+$kind: http-request
+name: /api/equipos
+url: "{{baseUrl}}/api/equipos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "descripcion": "string",
+      "nombre": "string",
+      "servicioId": 1709608968
+    }
+settings: {}
+examples: ./.resources/-api-equipos-1.resources/examples
+order: 3000

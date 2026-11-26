@@ -1,0 +1,17 @@
+$kind: http-request
+name: /api/cajas/:id
+url: "{{baseUrl}}/api/cajas/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: "1833"
+body:
+  type: json
+  content: |-
+    {
+      "descripcion": "string"
+    }
+settings: {}
+examples: ./.resources/-api-cajas-id-1.resources/examples
+order: 5000

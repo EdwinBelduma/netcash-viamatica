@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using NetCash.Aplicacion.DTOs.Dashboard;
 using NetCash.Aplicacion.DTOs.Menus;
@@ -17,18 +16,34 @@ public class DashboardServicio : IDashboardServicio
         _context = context;
     }
 
+    // ==========================================
+    // RESUMEN GENERAL DEL DASHBOARD
+    // ==========================================
+
     public async Task<DashboardRespuesta> ObtenerResumenAsync(
         int usuarioId,
         string rol,
         DateTime desde,
         DateTime hasta)
     {
+        // ==========================================
+        // CONSULTAS BASE
+        // ==========================================
+
         var turnos = _context.Turnos
             .AsNoTracking()
             .Where(x =>
                 x.Activo &&
                 x.FechaTurno >= desde &&
                 x.FechaTurno < hasta);
+
+        var atendidos = _context.Turnos
+            .AsNoTracking()
+            .Where(x =>
+                x.Activo &&
+                x.Estado == EstadoTurno.Atendido &&
+                x.FechaFinAtencion >= desde &&
+                x.FechaFinAtencion < hasta);
 
         var pagos = _context.Pagos
             .AsNoTracking()
@@ -49,9 +64,16 @@ public class DashboardServicio : IDashboardServicio
                 (x.Estado == EstadoContrato.Vigente ||
                  x.Estado == EstadoContrato.Renovado));
 
+        // ==========================================
+        // FILTROS POR ROL
+        // ==========================================
+
         if (rol == "Cajero")
         {
             turnos = turnos.Where(x =>
+                x.CajeroId == usuarioId);
+
+            atendidos = atendidos.Where(x =>
                 x.CajeroId == usuarioId);
 
             pagos = pagos.Where(x =>
@@ -70,6 +92,9 @@ public class DashboardServicio : IDashboardServicio
             turnos = turnos.Where(x =>
                 x.GestorId == usuarioId);
 
+            atendidos = atendidos.Where(x =>
+                x.GestorId == usuarioId);
+
             cajas = cajas.Where(x =>
                 x.UsuariosCaja.Any(a =>
                     a.GestorId == usuarioId &&
@@ -84,6 +109,47 @@ public class DashboardServicio : IDashboardServicio
                     a.UsuarioId == x.CajeroId &&
                     a.Activo));
         }
+        else if (rol != "Administrador")
+        {
+            throw new UnauthorizedAccessException(
+                "El usuario no tiene permisos para consultar el dashboard.");
+        }
+
+        // ==========================================
+        // FUNCION ALMACENADA DE POSTGRESQL
+        // ==========================================
+
+        int totalTurnosAtendidos;
+
+        if (rol == "Administrador")
+        {
+            totalTurnosAtendidos =
+                await ObtenerTurnosAtendidosSqlAsync(
+                    desde,
+                    hasta,
+                    null);
+        }
+        else if (rol == "Cajero")
+        {
+            totalTurnosAtendidos =
+                await ObtenerTurnosAtendidosSqlAsync(
+                    desde,
+                    hasta,
+                    usuarioId);
+        }
+        else
+        {
+            // La funcion SQL actual filtra por cajero,
+            // no por gestor. Se conserva el filtro
+            // correspondiente mediante Entity Framework.
+
+            totalTurnosAtendidos =
+                await atendidos.CountAsync();
+        }
+
+        // ==========================================
+        // INDICADORES GENERALES
+        // ==========================================
 
         var respuesta = new DashboardRespuesta
         {
@@ -101,8 +167,7 @@ public class DashboardServicio : IDashboardServicio
             TurnosEnAtencion = await turnos.CountAsync(x =>
                 x.Estado == EstadoTurno.EnAtencion),
 
-            TurnosAtendidos = await turnos.CountAsync(x =>
-                x.Estado == EstadoTurno.Atendido),
+            TurnosAtendidos = totalTurnosAtendidos,
 
             ContratosVigentes = await contratos.CountAsync(),
 
@@ -111,6 +176,10 @@ public class DashboardServicio : IDashboardServicio
             TotalRecaudado = await pagos
                 .SumAsync(x => (decimal?)x.Monto) ?? 0
         };
+
+        // ==========================================
+        // INDICADORES DEL ADMINISTRADOR
+        // ==========================================
 
         if (rol == "Administrador")
         {
@@ -134,6 +203,7 @@ public class DashboardServicio : IDashboardServicio
 
             respuesta.UsuariosPendientes = await _context.Usuarios
                 .CountAsync(x =>
+                    x.Activo &&
                     x.Estado == EstadoUsuario.PendienteAprobacion);
 
             respuesta.SesionesActivas = await _context.Usuarios
@@ -154,8 +224,24 @@ public class DashboardServicio : IDashboardServicio
                 .ToListAsync();
         }
 
-        var atendidos = turnos.Where(x =>
-            x.Estado == EstadoTurno.Atendido);
+        // ==========================================
+        // INDICADORES DEL GESTOR
+        // ==========================================
+
+        if (rol == "Gestor")
+        {
+            respuesta.UsuariosPendientes =
+                await _context.Usuarios
+                    .CountAsync(x =>
+                        x.Activo &&
+                        x.UsuarioCreacionId == usuarioId &&
+                        x.Estado ==
+                            EstadoUsuario.PendienteAprobacion);
+        }
+
+        // ==========================================
+        // INDICADORES POR CAJA
+        // ==========================================
 
         respuesta.IndicadoresCajas = await atendidos
             .GroupBy(x => new
@@ -169,7 +255,12 @@ public class DashboardServicio : IDashboardServicio
                 Nombre = g.Key.Descripcion,
                 TurnosAtendidos = g.Count()
             })
+            .OrderByDescending(x => x.TurnosAtendidos)
             .ToListAsync();
+
+        // ==========================================
+        // INDICADORES POR CAJERO
+        // ==========================================
 
         respuesta.IndicadoresCajeros = await atendidos
             .GroupBy(x => new
@@ -181,10 +272,16 @@ public class DashboardServicio : IDashboardServicio
             .Select(g => new IndicadorRespuesta
             {
                 Id = g.Key.CajeroId,
-                Nombre = g.Key.Nombres + " " + g.Key.Apellidos,
+                Nombre = g.Key.Nombres + " " +
+                         g.Key.Apellidos,
                 TurnosAtendidos = g.Count()
             })
+            .OrderByDescending(x => x.TurnosAtendidos)
             .ToListAsync();
+
+        // ==========================================
+        // INDICADORES POR GESTOR
+        // ==========================================
 
         if (rol == "Administrador" || rol == "Gestor")
         {
@@ -198,14 +295,43 @@ public class DashboardServicio : IDashboardServicio
                 .Select(g => new IndicadorRespuesta
                 {
                     Id = g.Key.GestorId,
-                    Nombre = g.Key.Nombres + " " + g.Key.Apellidos,
+                    Nombre = g.Key.Nombres + " " +
+                             g.Key.Apellidos,
                     TurnosAtendidos = g.Count()
                 })
+                .OrderByDescending(x => x.TurnosAtendidos)
                 .ToListAsync();
         }
 
         return respuesta;
     }
+
+    // ==========================================
+    // EJECUTAR FUNCION SQL DE POSTGRESQL
+    // ==========================================
+
+    private async Task<int> ObtenerTurnosAtendidosSqlAsync(
+        DateTime desde,
+        DateTime hasta,
+        int? cajeroId)
+    {
+        var total = await _context.Database
+            .SqlQuery<long>(
+                $"""
+                SELECT fn_turnos_atendidos(
+                    {desde},
+                    {hasta},
+                    CAST({cajeroId} AS INTEGER)
+                ) AS "Value"
+                """)
+            .SingleAsync();
+
+        return checked((int)total);
+    }
+
+    // ==========================================
+    // MENU DINAMICO SEGUN ROL
+    // ==========================================
 
     public async Task<List<MenuRespuesta>> ObtenerMenuAsync(
         int usuarioId)

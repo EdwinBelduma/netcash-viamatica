@@ -1,59 +1,109 @@
-# NetcashWeb
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.31.
+# NetCash Frontend
 
-## Development server
+Aplicación web desarrollada con Angular 21
+para la administración de cajas, usuarios,
+clientes y operaciones comerciales.
 
-To start a local development server, run:
+## Tecnologías
 
-```bash
-ng serve
-```
+- Angular 21.
+- TypeScript.
+- Bootstrap 5.
+- Bootstrap Icons.
+- SCSS.
+- RxJS.
+- Angular Router.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Arquitectura
 
-## Code scaffolding
+    src/
+    |-- app/
+    |   |-- core/
+    |   |   |-- guards/
+    |   |   |-- interceptors/
+    |   |   |-- models/
+    |   |   |-- services/
+    |   |-- features/
+    |   |-- layout/
+    |   |-- shared/
+    |-- environments/
+    |-- styles.scss
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Características
 
-```bash
-ng generate component component-name
-```
+- Diseño responsive.
+- Inicio de sesión.
+- Dashboard con indicadores.
+- Menú dinámico basado en roles.
+- Formularios con validaciones.
+- Componentes reutilizables.
+- Interceptor de autenticación.
+- Protección de rutas.
+- Lazy loading.
+- Indicadores de carga.
+- Mensajes de éxito y error.
+- Integración con API REST.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Requisitos
 
-```bash
-ng generate --help
-```
+- Node.js 24.
+- npm.
+- Angular CLI.
 
-## Building
+## Instalación
 
-To build the project run:
+    npm ci
 
-```bash
-ng build
-```
+## Ejecución local
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+    ng serve --port 4200 --proxy-config proxy.conf.json
 
-## Running unit tests
+Acceso:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+http://localhost:4200
 
-```bash
-ng test
-```
+El backend debe estar disponible en el puerto 5000
+para utilizar el proxy de desarrollo.
 
-## Running end-to-end tests
+## Compilación
 
-For end-to-end (e2e) testing, run:
+    npm run build
 
-```bash
-ng e2e
-```
+## Ejecución con Docker
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Desde la raíz del repositorio:
 
-## Additional Resources
+    docker compose up -d --build
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+El frontend se publica mediante Nginx.
+
+Nginx redirige las solicitudes /api hacia
+el contenedor del backend.
+
+## Módulos
+
+- Login.
+- Dashboard.
+- Usuarios.
+- Clientes.
+- Cajas.
+- Turnos.
+- Servicios.
+- Equipos.
+- Contratos.
+- Pagos.
+
+## Seguridad
+
+El frontend utiliza guards para proteger las rutas
+e interceptores para enviar los tokens de
+autenticación a la API.
+
+La autorización definitiva se realiza en el backend.
+
+## Autor
+
+Edwin Leonel Belduma Belduma
+
+Prueba técnica - VIAMATICA | 2026

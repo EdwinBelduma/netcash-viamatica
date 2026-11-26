@@ -1,0 +1,14 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/dashboard/resumen?desde=1998-11-09&hasta=1998-11-09"
+  method: GET
+  queryParams:
+    desde: 1998-11-09
+    hasta: 1998-11-09
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

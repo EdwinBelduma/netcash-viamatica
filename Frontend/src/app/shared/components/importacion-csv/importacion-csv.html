@@ -1,0 +1,222 @@
+<div class="acciones-importacion">
+
+    <button
+        type="button"
+        class="btn btn-outline-success"
+        (click)="abrir()">
+
+        <i class="bi bi-upload"></i>
+        Importar CSV
+
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="descargarPlantilla()">
+
+        <i class="bi bi-download"></i>
+        Descargar plantilla
+
+    </button>
+
+</div>
+
+@if (mostrarPanel()) {
+
+    <div class="importacion-fondo">
+
+        <section
+            class="importacion-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-importacion">
+
+            <div class="importacion-header">
+
+                <div>
+
+                    <h4 id="titulo-importacion">
+
+                        <i class="bi bi-file-earmark-spreadsheet"></i>
+
+                        Importar {{ tipo() }}
+
+                    </h4>
+
+                    <p>
+                        Carga masiva de registros mediante CSV.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Cerrar"
+                    [disabled]="importando()"
+                    (click)="cerrar()">
+
+                </button>
+
+            </div>
+
+            <div class="importacion-body">
+
+                <div class="alert alert-info">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    Utiliza la plantilla correspondiente
+                    y conserva el orden de las columnas.
+
+                </div>
+
+                <label
+                    class="form-label"
+                    for="archivo-csv">
+
+                    Seleccionar archivo CSV
+
+                </label>
+
+                <input
+                    id="archivo-csv"
+                    type="file"
+                    class="form-control"
+                    accept=".csv,text/csv"
+                    [disabled]="importando() || resultado() !== null"
+                    (change)="seleccionarArchivo($event)">
+
+                <small class="text-muted">
+
+                    Tamaño máximo permitido: 5 MB.
+
+                </small>
+
+                @if (error()) {
+
+                    <div class="alert alert-danger mt-3">
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                        {{ error() }}
+
+                    </div>
+
+                }
+
+                @if (resultado(); as datos) {
+
+                    <div class="resultado-importacion mt-4">
+
+                        <h5>Resultado de la importación</h5>
+
+                        <div class="resumen-importacion">
+
+                            <div class="indicador total">
+
+                                <strong>
+                                    {{ datos.totalRegistros }}
+                                </strong>
+
+                                <span>Total</span>
+
+                            </div>
+
+                            <div class="indicador correctos">
+
+                                <strong>
+                                    {{ datos.registrosImportados }}
+                                </strong>
+
+                                <span>Importados</span>
+
+                            </div>
+
+                            <div class="indicador rechazados">
+
+                                <strong>
+                                    {{ datos.registrosRechazados }}
+                                </strong>
+
+                                <span>Rechazados</span>
+
+                            </div>
+
+                        </div>
+
+                        @if (datos.errores.length > 0) {
+
+                            <div class="alert alert-warning mt-3">
+
+                                <strong>
+                                    Observaciones:
+                                </strong>
+
+                                <ul class="mb-0">
+
+                                    @for (
+                                        detalle of datos.errores;
+                                        track $index
+                                    ) {
+
+                                        <li>{{ detalle }}</li>
+
+                                    }
+
+                                </ul>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+                }
+
+            </div>
+
+            <div class="importacion-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    [disabled]="importando()"
+                    (click)="cerrar()">
+
+                    Cerrar
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    [disabled]="!archivo() || importando()"
+                    (click)="importar()">
+
+                    @if (importando()) {
+
+                        <span
+                            class="spinner-border spinner-border-sm">
+                        </span>
+
+                        Importando...
+
+                    } @else {
+
+                        <i class="bi bi-upload"></i>
+
+                        Importar registros
+
+                    }
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+}
